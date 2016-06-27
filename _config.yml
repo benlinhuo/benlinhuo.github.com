@@ -71,9 +71,6 @@ navs:
     href: /bookmark
     label: Bookmark
 
-  -
-    href: /about
-    label: About
 
 # Sidebar to show popular repo
 side_bar_repo_limit: 5 # Number of repos to show
