@@ -6,7 +6,11 @@ menu: Bookmark
 ---
 
 ## iOS(Objective-C)
-- [YYKit](https://github.com/ibireme/YYKit/) - YYKit is a collection of iOS components.
+- [YYKit](https://github.com/ibireme/YYKit/) - YYKit is a collection of iOS components
+- [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager) - It allow keyboard not to obstruct UITextFiled/UITextView
+- [AFNetworking](https://github.com/AFNetworking/AFNetworking) - A useful networking framework
+- [SDWebImage](https://github.com/rs/SDWebImage) - Asynchronous image downloader with cache support as a UIImageView category
+- [Mantle](https://github.com/Mantle/Mantle) - Model framework for Cocoa and Cocoa Touch
 
 ## PHP
 - [Idiorm](https://github.com/j4mie/idiorm/) - A lightweight nearly-zero-config object-relational mapper and fluent query builder for PHP5
