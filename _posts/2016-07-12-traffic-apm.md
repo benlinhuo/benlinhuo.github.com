@@ -1,9 +1,9 @@
 ---
 layout:     post
-title:      浅析tsf
-category: php
-tags: [php]
-description: TSF，全称Tencent Server Framework，底层基于swoole 扩展+ Coroutine实现的PHP协程框架
+title:      网络流量统计 －－ NetworkTraffic
+category: iOS
+tags: [iOS]
+description: 用于统计当前 APP 使用的流量，可以是单条 API，或者总和，或者页面划分
 ---
 
 ##简介
