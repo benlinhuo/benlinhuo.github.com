@@ -1,0 +1,27 @@
+---
+layout:     post
+title:      浅析tsf
+category: php
+tags: [php]
+description: TSF，全称Tencent Server Framework，底层基于swoole 扩展+ Coroutine实现的PHP协程框架
+---
+
+##简介
+APP 的开发，我们时常要观察的一个性能问题，就是流量的消耗。作为用户，当然是流量消耗越少越好，这样在非 WI-FI 下节省的就是钱啊；然而作为优秀的开发者，自然是尽其所能优化流量的使用。
+
+我们可以利用 Xcode 自带的流量测试工具进行测试：当我们 APP 处于运行状态时，我们使用 APP ，Xcode 在如下位置就可以看到流量使用的总和：
+
+![Xcode Network](../assets/images/2016-07-12image1.jpg)
+
+我们还可以通过 Charles 等工具抓包，查看到具体 API 请求的流量多少。当然如果我们想要模拟真实场景的使用，就需要通过嵌入流量统计代码到项目中，跟随用户使用 APP 情况，这样获取到的流量统计数据才最真实。它有相对应的项目：github 地址。这篇博客便是它的补充。
+
+1. ##核心原理
+
+##深入知识点
+
+##不足之处
+目前这个流量统计的 SDK 就只针对了网络请求使用了 NSURLConnection 和 NSURLSession 库的做了统计。如下几种情况，暂时还统计不到：
+
+1. 使用 UIWebView 或者 WKWebView ，这是加载 H5 页面。最多我们通过使用 NSURLConnection 的方式加载 H5 页面可以统计到，但是该页面中的异步请求，比如图片、API 异步请求等，目前还统计不到
+
+高德地图封装的 API 请求，查看了下，它底层使用的还是上述两种库之一，因此是可以统计到的。
