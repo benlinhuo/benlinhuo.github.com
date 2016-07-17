@@ -11,7 +11,7 @@ description: 用于统计当前 APP 使用的流量，可以是单条 API，或�
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们可以利用 Xcode 自带的流量测试工具进行测试：当我们 APP 处于运行状态时，我们使用 APP ，Xcode 在如下位置就可以看到流量使用的总和：
 
-![Xcode Network](/assets/images/2016-07-12-network-traffic2.jpg)
+![Xcode Network](/assets/images/2016-07-12-network-traffic1.jpg)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们还可以通过 Charles 等工具抓包，查看到具体 API 请求的流量多少。当然如果我们想要模拟真实场景的使用，就需要通过嵌入流量统计代码到项目中，跟随用户使用 APP 情况，这样获取到的流量统计数据才最真实。它相对应的代码： [github 地址](https://github.com/benlinhuo/HBLNetowrkTraffic/tree/master)。这篇博客是它的补充。
 
