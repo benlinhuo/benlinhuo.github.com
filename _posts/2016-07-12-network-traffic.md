@@ -28,7 +28,9 @@ description: 用于统计当前 APP 使用的流量，可以是单条 API，或�
 
 
 ## 核心原理
+
 ### 如何嵌入流量统计代码
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们网络请求的库，绝大部分使用的是  NSURLSession，可能还有一些比较久远的 APP 使用的是 NSURLConnection，这两种我们都考虑。针对这两类库，我们利用 OC 的 runtime 机制，在所有网络请求之前，扫描项目中用到的所有类关于网络请求的方法，然后再 swizzle 这些 method（即交换两个方法的具体实现），在 swizzledMethod 中，我们先嵌入流量统计的代码，然后再完成该 method 本应该完成的任务。我们针对 NRURLSession 和 NSURLConnection 类方法和 delegate 分开进行 swizzle，原因很简单。部分代码如下：
 
 
