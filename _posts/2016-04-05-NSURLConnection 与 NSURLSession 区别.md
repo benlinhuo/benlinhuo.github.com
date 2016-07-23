@@ -7,6 +7,7 @@ description: 总结 NSURLConnection 与 NSURLSession 的区别
 ---
 
 ## 简介
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这两个网络接口大家都很熟悉。最新的 AFNetworking 3.0 开始已经弃用了 NSURLConnection ，改用了 NSURLSession。而且从 iOS7 推出 NSURLSession 以后，苹果已经在竭力推进 NSURLSession 的使用。iOS9 之后的 NSURLConnection 部分方法已经不支持了（被过期了）。那既然这样，NSURLSession 到底比 NSURLConnection 好在什么地方呢？ 
 
 ## 二者的比较
