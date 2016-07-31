@@ -3,7 +3,7 @@ layout:     post
 title:      NSURLConnection 与 NSURLSession 区别
 category: iOS
 tags: [iOS]
-description: 总结 NSURLConnection 与 NSURLSession 的区别
+description: 它们二者都是苹果推荐的网络库。当它们推出 NSURLSession 时，是希望能替换 NSURLConnection，why？请看它们二者的区别
 ---
 
 ## 简介

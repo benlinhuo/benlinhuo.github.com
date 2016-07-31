@@ -3,7 +3,7 @@ layout:     post
 title:      网络流量统计 －－ NetworkTraffic
 category: iOS
 tags: [iOS]
-description: 用于统计当前 APP 使用的流量，可以是单条 API，或者总和，或者页面划分
+description: 用于统计当前 APP 使用的流量，可以是单条 API，或者总和，或者以页面为单位划分。
 ---
 
 ## 简介
