@@ -166,7 +166,7 @@ Range头域可以请求实体的一个或者多个子范围。例如，
  
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
-    APLAppDelegate *appDelegate = (APLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    HBLAppDelegate *appDelegate = (APLAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (appDelegate.backgroundSessionCompletionHandler) {
         void (^completionHandler)() = appDelegate.backgroundSessionCompletionHandler;
         appDelegate.backgroundSessionCompletionHandler = nil;
