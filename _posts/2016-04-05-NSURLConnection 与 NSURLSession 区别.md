@@ -127,7 +127,66 @@ Range头域可以请求实体的一个或者多个子范围。例如，
 
 ```
 
-### 5. 配置信息
+### 5. 后台下载
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NSURLSession 支持程序的后台下载和上传, 苹果官方将其称之进程之外的上传和下载, 这些任务都交给后台守护线程完成, 而不是应用本身, 即使文件在下载和上传过程中崩溃了也可以继续运行(当然如果用户强制关闭程序的话, NSURLSession会断开连接)。在前台，为了用户体验，下载过程中进度条会一直刷新进度。当程序进入后台后, 事实上任务是交给iOS系统来调度的, 具体什么时候下载完成就不知道了。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如果是一个BackgroundSession，在Task执行的时候，用户切到后台，Session会和ApplicationDelegate做交互。当程序切到后台后，在BackgroundSession中的Task还会继续下载。如下分几个场景分析 Session 和 Application 的关系：
+
+* 当加入了多个Task，程序没有切换到后台
+
+	这种情况Task会按照NSURLSessionConfiguration的设置正常下载，不会和ApplicationDelegate有交互。
+* 当加入了多个Task，程序切到后台，所有Task都完成下载。
+
+	1> 在切到后台之后，Session的Delegate不会再收到，Task相关的消息，直到所有Task全都完成后，系统会调用ApplicationDelegate的`application:handleEventsForBackgroundURLSession:completionHandler:`回调，
+	
+	2> 之后“汇报”下载工作，对于每一个后台下载的Task调用Session的Delegate中的`URLSession:downloadTask:didFinishDownloadingToURL:`（成功的话）和`URLSession:task:didCompleteWithError:`（成功或者失败都会调用）。这两个 API 都是前台用于文件下载 delegate 方法。
+	
+	3> 之后调用Session的Delegate回调`URLSessionDidFinishEventsForBackgroundURLSession:`。
+	
+	注意：在ApplicationDelegate被唤醒后，会有个参数ComplietionHandler，这个参数是个Block，这个参数要在后面Session的Delegate中didFinish的时候调用一下，如下：
+	
+```
+
+@implementation HBLAppDelegate
+ 
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier
+  completionHandler:(void (^)())completionHandler
+{
+    BLog();
+    /*
+     Store the completion handler. The completion handler is invoked by the view controller's checkForAllDownloadsHavingCompleted method (if all the download tasks have been completed).
+     */
+      self.backgroundSessionCompletionHandler = completionHandler; // 下述方法 URLSessionDidFinishEventsForBackgroundURLSession: 需要执行该 block
+}
+//……
+@end
+ 
+//Session的Delegate
+@implementation HBLViewController
+ 
+- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
+{
+    APLAppDelegate *appDelegate = (APLAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (appDelegate.backgroundSessionCompletionHandler) {
+        void (^completionHandler)() = appDelegate.backgroundSessionCompletionHandler;
+        appDelegate.backgroundSessionCompletionHandler = nil;
+        completionHandler();
+    }
+ 
+    NSLog(@"All tasks are finished");
+}
+@end
+```
+
+* 当加入了多个Task，程序切到后台，下载完成了几个Task，然后用户又切换到前台。（程序没有退出）
+	
+	切到后台之后，Session的Delegate仍然收不到消息。在下载完成几个Task之后再切换到前台，系统会先汇报已经下载完成的Task的情况，然后继续下载没有下载完成的Task，后面的过程同第一种情况。
+	
+* 当加入了多个Task，程序切到后台，几个Task已经完成，但还有Task还没有下载完的时候关掉强制退出程序，然后再进入程序的时候。（程序退出了）
+
+	最后这个情况比较有意思，由于程序已经退出了，后面没有下完Session就不在了后面的Task肯定是失败了。但是已经下载成功的那些Task，新启动的程序也没有听“汇报”的机会了。经过实验发现，这个时候之前在NSURLSessionConfiguration设置的NSString类型的ID起作用了，当ID相同的时候，一旦生成Session对象并设置Delegate，马上可以收到上一次关闭程序之前没有汇报工作的Task的结束情况（成功或者失败）。但是当ID不相同，这些情况就收不到了，因此为了不让自己的消息被别的应用程序收到，或者收到别的应用程序的消息，起见ID还是和程序的Bundle名称绑定上比较好，至少保证唯一性。
+
+### 6. 配置信息
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NSURLSession 的构造方法（sessionWithConfiguration:delegate:delegateQueue:）中有一个 NSURLSessionConfiguration 类的参数可以设置配置信息，它决定了 cookie、安全性和高速缓存的策略，最大主机连接数，资源管理，网络超时等配置。而 NSURLConnection 不能进行这个配置，它是所有的都依赖于一个全局的配置对象，这样缺乏灵活性。这方面，NSURLSession 做的更好。
 
 NSURLSession 的如下三种配置：
