@@ -1,5 +1,11 @@
 方法名 | 解析
-----|------
+-------|------
 Method setterMethod = class_getInstanceMethod(Class类型, SEL类型); | 获取类实例方法，返回 Method 类型  
 Class originalClass = object_getClass(self); | 获取一个实例的类  
 object_setClass(self, Class类型); | 将一个对象（如 self）设置为新类类型,返回原来的Class  
+
+dog | bird | cat
+----|------|----
+foo | foo  | foo
+bar | bar  | bar
+baz | baz  | baz
