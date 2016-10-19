@@ -84,8 +84,8 @@ description: 隐藏 navigationBar 经常容易造成异常UI，严重影响体�
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上述的解决方案，在我们变化 `StatusBarStyle` 为白色 (`我的` tab 演示)，或者页面在滑动过程中，变化 `StatusBarStyle` （`首页` tab 演示），等进入下一个页面再返回时（多次使用 pop 手势），出现了导航栏错乱的 UI。如下图：
 
-![我的页面](https://github.com/benlinhuo/benlinhuo.github.com/blob/master/assets/images/mytab.gif)
-![首页页面](https://github.com/benlinhuo/benlinhuo.github.com/blob/master/assets/images/hometab.gif)
+![我的页面](/assets/images/mytab.gif)
+![首页页面](/assets/images/hometab.gif)
 
 如上问题的解决方案有两种。
 
