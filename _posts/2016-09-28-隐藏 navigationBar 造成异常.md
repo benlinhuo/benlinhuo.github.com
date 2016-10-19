@@ -60,8 +60,7 @@ description: 隐藏 navigationBar 经常容易造成异常UI，严重影响体�
 }
 
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但为了我们能正确处理 `pop` 手势，我们一般都是在 `push` / `pop` 等过程中禁掉该手势 `    self.interactivePopGestureRecognizer.enabled = NO;
-` ，等视图控制器可见的时候再使用该手势，如下代码：
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但为了我们能正确处理 `pop` 手势，我们一般都是在 `push` / `pop` 等过程中禁掉该手势 `self.interactivePopGestureRecognizer.enabled = NO;` ，等视图控制器可见的时候再使用该手势，如下代码：
 
 ```
 // 它用一个对外公开的方法 ｀shouldPopGestureEnable｀ 来让用户指定某个视图控制器是否可以使用 pop 手势
@@ -111,8 +110,8 @@ description: 隐藏 navigationBar 经常容易造成异常UI，严重影响体�
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状态栏就是我们设置显示电池电量、时间、网络部分标识的颜色，它只能设置为两种：
 
-1. 黑色（UIStatusBarStyleDefault，默认的）
-2. 白色(UIStatusBarStyleLightContent)
+1. 黑色（`UIStatusBarStyleDefault`，默认的）
+2. 白色（`UIStatusBarStyleLightContent`）
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在 iOS8 中，`UIStatusBarStyleBlackTranslucent` 与 `UIStatusBarStyleBlackOpaque` 相当于 `UIStatusBarStyleLightContent`。
 
@@ -126,9 +125,9 @@ description: 隐藏 navigationBar 经常容易造成异常UI，严重影响体�
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方案还有关联的几个方法，如下：
 
-1. - (UIStatusBarStyle)preferredStatusBarStyle;
-2. - (UIViewController *)childViewControllerForStatusBarStyle;
-3. - (void)setNeedsStatusBarAppearanceUpdate;
+1. `- (UIStatusBarStyle)preferredStatusBarStyle;`
+2. `- (UIViewController *)childViewControllerForStatusBarStyle;`
+3. `- (void)setNeedsStatusBarAppearanceUpdate;`
 
 方法1: 它会在我们 `UIViewController` 显示的时候，主动调一次该方法，来改变状态栏；
 
