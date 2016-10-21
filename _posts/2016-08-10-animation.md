@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Core Animation 基础知识总结 
+title:      Core Animation 基础知识总结（一） 
 category: iOS
 tags: [iOS]
 description: iOS 动画绝大部分都是通过 Core Animation 框架来完成的。Core Animation 会将大部分的实际绘图任务交给图形硬件来处理，图形硬件会加速图形渲染的速度。所以使用 Core Animation 制作的动画都拥有更高的帧率，而且显示效果更加平滑，当然它不会加重 CPU 的负担而影响程序的运行速度。
@@ -9,11 +9,11 @@ description: iOS 动画绝大部分都是通过 Core Animation 框架来完成�
 ## 简介
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Core Animation提供了很多类来完成动画效果，有些复杂效果只需要几行代码就可以完成。本篇文章会针对这些类做介绍，后面部分会利用这些类完成一些复杂的动画效果，并对这些效果做解析。它有对应的：[Demo](https://github.com/benlinhuo/AnimationSet).
 
-##类图
+## 类图
 
 ![Core Animation 类图](/assets/images/2016-08-10-animationClass.png)
 
-##类解析
+## 类解析
 
 ### CAAnimation / CAMediaTiming
 
@@ -325,3 +325,22 @@ kCATransitionFromBottom
 ```
 
 - filter：它默认为nil，一旦设置了此属性，type和subtype就会被忽略。这个属性一般用的很少。
+
+
+## 仿射变换
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;仿射变换－`CGAffineTransform`，它是 `CoreGraphics` 框架中的类，用于设定 `UIView`  的 `transform` 属性，以控制视图的缩放、旋转和平移操作（是二维空间），实现的效果和上述 `Core Animation` 方案相同，不过它可能写的代码行数更少。`CGAffineTransform` 是一个可以和二维空间向量（如 CGPoint）做乘法的 3X2 矩阵，所以称为仿射变换，“仿射” 的意思是无论变换矩阵用什么值，图层中平行的两条线在变换之后仍然保持平行。
+
+```
+struct CGAffineTransform {
+  CGFloat a, b, c, d;
+  CGFloat tx, ty;
+};
+```
+这是代码中定义的，它对应 3*3 矩阵的变换
+
+![3X3矩阵](/assets/images/transform.png)
+
+### CGAffineTransformIdentity
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线性代数中，这是恒等变换。一般在我们做完动画后，再重新动画，则需要先归位，即设置 `view.transform = CGAffineTransformIdentity;` ，否则的话后面的动画可能就不是自己想要的效果，因为它 
