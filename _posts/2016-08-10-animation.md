@@ -343,4 +343,165 @@ struct CGAffineTransform {
 
 ### CGAffineTransformIdentity
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线性代数中，这是恒等变换。一般在我们做完动画后，再重新动画，则需要先归位，即设置 `view.transform = CGAffineTransformIdentity;` ，否则的话后面的动画可能就不是自己想要的效果，因为它 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线性代数中，这是恒等变换。一般在我们做完动画后，再重新动画，则需要先归位，即设置 `view.transform = CGAffineTransformIdentity;` ，否则的话后面动画可能就不是自己想要的效果，因为它的起始状态不是自己一开始设定的状态。
+
+#### 直接创建变换 `CGAffineTransformMake`
+
+```
+ CGAffineTransform CGAffineTransformMake(CGFloat a, CGFloat b, CGFloat c, CGFloat d, CGFloat tx, CGFloat ty)
+```
+直接创建变换，所需参数比较多，各个参数对应上述 3X3 矩阵的前两列。一般来说，我们是不使用这个来创建变换，计算比较复杂。
+
+#### 直接创建变换 `CGAffineTransformMake?`
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方式创建的变换都是针对某一种情况，例如移动、缩放、旋转。
+
+```
+CGAffineTransform CGAffineTransformMakeTranslation(CGFloat tx,
+  CGFloat ty)
+CGAffineTransform CGAffineTransformMakeScale(CGFloat sx, CGFloat sy)
+CGAffineTransform CGAffineTransformMakeRotation(CGFloat angle)
+```
+
+1. `CGAffineTransformMakeTranslation` 创建一个平移的变化。即如果是一个 `UIView`，表示它的起始位置 x 会加上 tx，y 会加上 ty。
+2. `CGAffineTransformMakeScale` 创建一个给定比例缩放的变换。如 `UIView`，引用了这个变换，则图片的宽度就会变成 `width*sx`，对应高度变成 `height*sy`。
+	- `CGAffineTransformMakeScale(-1.0, 1.0)` ，表示水平翻转
+	- `CGAffineTransformMakeScale(1.0, -1.0)` ，表示垂直翻转
+3. `CGAffineTransformMakeRotation` 创建一个旋转角度的变化，参数是一个弧度。意思表示从当前位置旋转多少度。
+
+
+#### 在已有变换基础上再添加另一种动效
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;比如有的时候，我们希望在缩放的同时平移，所以 `仿射变换` 也支持几种动画效果的叠加。
+
+```
+CGAffineTransform CGAffineTransformTranslate(CGAffineTransform t,
+  CGFloat tx, CGFloat ty)
+CGAffineTransform CGAffineTransformScale(CGAffineTransform t,
+  CGFloat sx, CGFloat sy)
+CGAffineTransform CGAffineTransformRotate(CGAffineTransform t,
+  CGFloat angle)
+```
+
+这三个方法的第一个参数，都是已定义的一种变换，后面是再添加一种动效：平移、缩放、旋转。跟之前的解析一致。
+
+
+#### 转换的改变
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们在定义好一种转换以后，可以对它做变化。
+
+```
+CGAffineTransform CGAffineTransformInvert(CGAffineTransform t)
+CGAffineTransform CGAffineTransformConcat(CGAffineTransform t1,
+  CGAffineTransform t2)
+```
+-  `CGAffineTransformInvert` 表示反向动画，意思是我指定当前大小放大2倍。则反向之后就是：从2倍大小缩小到正常大小
+-  `CGAffineTransformConcat` 表示返回一个由 t1 和 t2 合并而成的转换
+
+#### 转换的运用
+
+```
+CGPoint CGPointApplyAffineTransform(CGPoint point,
+  CGAffineTransform t)
+CGSize CGSizeApplyAffineTransform(CGSize size, CGAffineTransform t)
+CGRect CGRectApplyAffineTransform(CGRect rect, CGAffineTransform t)
+```
+
+- `CGPointApplyAffineTransform` 把变化应用到一个点上，它返回还是一个点。所以这个方法最终也只是影响这个点所在的位置。如下实例：
+
+```
+// 把变化应用到一个点上
+_demoView.transform = CGAffineTransformIdentity;
+[UIView animateWithDuration:1.0f animations:^{
+     CGAffineTransform t1 = CGAffineTransformMakeTranslation(100, 100);
+     CGPoint point = CGPointApplyAffineTransform(CGPointMake(50, 50), t1);
+     NSLog(@"point.x = %f, point.y = %f", point.x, point.y);
+}];
+
+// 打印结果为：
+HBLAnimationSet[38618:9862114] point.x = 150.000000, point.y = 150.000000
+
+所以只影响到指定的点（50，50），平移（100，100）之后，变成了（150，150）了
+```
+
+- `CGSizeApplyAffineTransform ` 把变化应用到一个区域上，它返回还是一个区域。所以这个方法最终也只是影响这个区域大小。如下实例：
+
+```
+实例1:
+// 把变化应用到一个区域上
+_demoView.transform = CGAffineTransformIdentity;
+[UIView animateWithDuration:1.0f animations:^{
+    CGAffineTransform t1 = CGAffineTransformMakeTranslation(100, 100);
+    CGSize size = CGSizeApplyAffineTransform(CGSizeMake(50, 50), t1);
+    NSLog(@"size.width = %f, size.height = %f", size.width, size.height);
+}];
+
+// 打印结果：
+HBLAnimationSet[38666:9896059] size.width = 50.000000, size.height = 50.000000   
+区域大小没变
+```
+
+当我们把变换由平移改成了缩放，则区域大小就应该变化了
+
+```
+// 把变化应用到一个区域上
+_demoView.transform = CGAffineTransformIdentity;
+[UIView animateWithDuration:1.0f animations:^{
+    CGAffineTransform t1 = CGAffineTransformMakeScale(2, 2);
+    CGSize size = CGSizeApplyAffineTransform(CGSizeMake(50, 50), t1);
+    NSLog(@"size.width = %f, size.height = %f", size.width, size.height);
+}];
+
+// 打印结果
+HBLAnimationSet[38701:9909686] size.width = 100.000000, size.height = 100.000000
+发现区域大小的长和宽都变成原来2倍了
+```
+
+- `CGRectApplyAffineTransform ` 就是集合点和区域大小的一个变换影响。
+
+#### 转换的检测
+
+```
+// 判断两个转换是否相等，如下代码便可知，只要两个动画的效果一样，则二者便相等
+bool CGAffineTransformEqualToTransform(CGAffineTransform t1,
+  CGAffineTransform t2)
+  
+// 判断当前转换是否处于原始状态
+bool CGAffineTransformIsIdentity(CGAffineTransform t)
+```
+判断转换的实例如下：
+
+```
+// 判断两个转换是否相等的含义
+CGAffineTransform t1 = CGAffineTransformMakeTranslation(100, 100);
+CGAffineTransform t2 = CGAffineTransformMakeTranslation(100, 100);
+NSLog(@"t1是否等于t2：%d", CGAffineTransformEqualToTransform(t1, t2));
+
+// 打印结果
+HBLAnimationSet[38495:9807678] t1是否等于t2：1
+```
+
+
+### UIView 的类方法实现转场动画
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如下两个方法是用于创建过渡动画的，主要用于 UIView 进入或者离开视图。
+
+```
+// 单视图
++ (void)transitionWithView:(UIView *)view duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options animations:(void (^ __nullable)(void))animations completion:(void (^ __nullable)(BOOL finished))completion 
+
+// 双视图
++ (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^ __nullable)(BOOL finished))completion 
+```
+我们之前有见过视图控制器（ `UIViewController`） 的转场动画，那其实视图（`UIView`）也是可以进行转场动画的。
+
+
+## 总结
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;以上都是一些动画的基础知识，如果我们想要构建出复杂好看的动画效果，则可能要融合上述多种动画方式。下一节会有几个常见的复杂动画实现，和上述简单动画在一个 demo 中。
+
+
+
+
+
+
