@@ -327,7 +327,7 @@ kCATransitionFromBottom
 - filter：它默认为nil，一旦设置了此属性，type和subtype就会被忽略。这个属性一般用的很少。
 
 
-## 仿射变换
+## 2D仿射变换
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;仿射变换－`CGAffineTransform`，它是 `CoreGraphics` 框架中的类，用于设定 `UIView`  的 `transform` 属性，以控制视图的缩放、旋转和平移操作（是二维空间），实现的效果和上述 `Core Animation` 方案相同，不过它可能写的代码行数更少。`CGAffineTransform` 是一个可以和二维空间向量（如 CGPoint）做乘法的 3X2 矩阵，所以称为仿射变换，“仿射” 的意思是无论变换矩阵用什么值，图层中平行的两条线在变换之后仍然保持平行。
 
@@ -343,7 +343,7 @@ struct CGAffineTransform {
 
 ### CGAffineTransformIdentity
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线性代数中，这是恒等变换。一般在我们做完动画后，再重新动画，则需要先归位，即设置 `view.transform = CGAffineTransformIdentity;` ，否则的话后面动画可能就不是自己想要的效果，因为它的起始状态不是自己一开始设定的状态。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在线性代数中，这是恒等变换。一般在我们做完动画后，再重新动画，则需要先归位，即设置 `view.transform = CGAffineTransformIdentity;` ，否则的话后面动画可能就不是自己想要的效果，因为它的起始状态不是自己一开始设定的状态。`CGAffineTransformIdentity` 是单位矩阵，该矩阵没有缩放、平移、旋转。
 
 #### 直接创建变换 `CGAffineTransformMake`
 
@@ -495,6 +495,77 @@ HBLAnimationSet[38495:9807678] t1是否等于t2：1
 ```
 我们之前有见过视图控制器（ `UIViewController`） 的转场动画，那其实视图（`UIView`）也是可以进行转场动画的。
 
+
+## 3D仿射变换
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3D，动画效果会涉及到 Z 轴，效果更炫。不过它是针对 layer 图层的属性 `transform`，2D 是针对 `UIView`的。
+
+
+### iOS 坐标系统中有如下几个概念：
+
+- position：CGPoint 类型，`它表示指定图层相对于父图层的位置`，该值是基于父图层的坐标系；
+- bounds：CGRect 类型，指定图层大小（bounds.size）和原点（bounds.origin），`它是基于自身坐标系统的（所以很多情况下，bounds的origin都是（0，0））`。如果改变 bounds 的 origin，则该图层的子图层坐标都会跟着改变。也就是说，`改变自身的坐标系，本身在父图层的位置不变，但它上的子图层位置变化`
+- anchorPoint：CGPoint 类型（锚点），指定了 bounds 相对于 position 的值，`同时也作为一个变化时候的中心点`。锚点使用空间坐标系取值范围是0-1，默认0.5，即中心点。
+
+  1> anchorPoint 的图形解析如下：
+
+  ![anchorPoint在中心位置](/assets/image/anchorPoint1.png)
+
+  ![anchorPoint在边缘位置](/assets/image/anchorPoint2.png)
+
+  2> anchorPoint 的移动解释如下：
+  
+  ![移动前，anchorPoint位置](/assets/image/anchorPointBefore.png)
+  
+  移动前，锚点位置如上图，为（0.5，0.5）。当我们把锚点位置更改为（0，0），变成下图，其实我们可以看出来锚点没变，只是整个视图 position 变化了。一般来说，在我们修改完 anchorPoint 之后，会引起 layer 的 position 变化，所以一般需要重新修改 frame 来使 layer 回到正确位置上。（应该注意修改顺序，frame 实际是不保存，没有值的，它是根据 position 和 anchorPoint 算出来的）
+  
+  ![移动后，anchorPoint位置](/assets/image/anchorPointAfter.png)
+
+- frame：它本身是不会保存的，它是根据 position 和 bounds 获取到的。
+
+### CATransform3D
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`CATransform3D`数据结构定义了一个同质的三维变换（4X4矩阵），用于图层的旋转、缩放、偏移、歪斜和应用的透视。图层的两个属性指定了变换矩阵：transform（是结合 anchorPoint 的位置来对图层和图层上的子图层进行变换） 和 sublayers.transform（结合 anchorPoint 的位置来对图层进行变换，不包括本身）。使用需要在工程中导入 `QuartzCore.framework`，文件中 `#import <QuartzCore/CATransform3D.h>`。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`CATransform3DIdentity` 是单位矩阵，它没有缩放、旋转、歪斜、透视。该矩阵应用到图层上，就是设置了默认值的。
+
+```
+struct CATransform3D
+{
+CGFloat     m11（x缩放）,    m12（y切变）,      m13（旋转）,     m14（）;
+
+CGFloat     m21（x切变）,    m22（y缩放）,      m23（）,        m24（）;
+
+CGFloat     m31（旋转）,     m32（ ）,         m33（）,        m34（透视效果，要操作的这个对象要有旋转的角度，否则没有效果。正直/负值都有意义）;
+
+CGFloat     m41（x平移）,    m42（y平移）,      m43（z平移）,   m44（）;
+};
+```
+
+说明：
+
+- 整体比例变换时，也就是m11==m22时，若m33>1，图形整体缩小，若0<m33<1，图形整体放大，若m33<0,发生关于原点的对称等比变换。
+- 单设ｍ12或ｍ21的时候是切变效果，当【ｍ12=角度】和【ｍ21=－角度】的时候就是旋转效果了。两个角度值相同。
+
+![等式](/assets/images/3dTransform.png)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由上可以看到，m34实际影响了 Z 轴方向的 translation，m34=-1/D，默认值是0，我们应该尽可能的让 m34 这个值尽可能小，但又必须有明显的远小近大的效果。
+
+```
+-(CATransform3D)getTransForm3DWithAngle:(CGFloat)angle
+{
+        
+     CATransform3D transform =CATransform3DIdentity;//获取一个标准默认的CATransform3D仿射变换矩阵
+     transform.m34=4.5/-2000;//透视效果
+     transform=CATransform3DRotate(transform,angle,0,1,0);//获取旋转angle角度后的rotation矩阵。  
+     return transform;   
+}
+```
+如上，我们的视差可以通过在旋转的时候使得离视角近的地方放大，离视角远的地方缩小，即所谓的视差来形成3D的效果。如上代码，`设置透视效果的第二行代码一定要在第三行代码之前`。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3D 仿射变换的 API 和 2D类似，具体不详解释了。不过因为加入了 Z 轴，有几个注意点：
+
+1. 在平移的时候，有 tz，表示Z轴偏移位置，往外为正数。它是值越大，图层越往外（越接近人眼）。在两个图层叠加的时候，可以看的很明显。
 
 ## 总结
 
