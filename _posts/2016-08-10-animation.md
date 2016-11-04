@@ -1,27 +1,27 @@
 ---
 layout:     post
-title:      Core Animation 基础知识总结（一） 
+title:      动画的基础知识总结 
 category: iOS
 tags: [iOS]
 description: iOS 动画绝大部分都是通过 Core Animation 框架来完成的。Core Animation 会将大部分的实际绘图任务交给图形硬件来处理，图形硬件会加速图形渲染的速度。所以使用 Core Animation 制作的动画都拥有更高的帧率，而且显示效果更加平滑，当然它不会加重 CPU 的负担而影响程序的运行速度。
 ---
 
-## 简介
+## Core Animation
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Core Animation提供了很多类来完成动画效果，有些复杂效果只需要几行代码就可以完成。本篇文章会针对这些类做介绍，后面部分会利用这些类完成一些复杂的动画效果，并对这些效果做解析。它有对应的：[Demo](https://github.com/benlinhuo/AnimationSet).
 
-## 类图
+### 类图
 
 ![Core Animation 类图](/assets/images/2016-08-10-animationClass.png)
 
-## 类解析
+### 类解析
 
-### CAAnimation / CAMediaTiming
+#### CAAnimation / CAMediaTiming
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CAAnimation类是所有动画对象的父类，负责控制动画的持续时间和速度等，是个 `抽象类`，不能直接使用，应该使用它具体的子类。这个类实现了协议 `CAMediaTiming` ，该协议定义了多个属性，所以实现这个协议的类也就拥有了这些属性。定义的代码：`@interface CAAnimation : NSObject
     <NSCoding, NSCopying, CAMediaTiming, CAAction>`
 
 
-#### `CAMediaTiming` 协议定义的属性如下：
+##### `CAMediaTiming` 协议定义的属性如下：
 
 - beginTime: 动画的开始时间，这个需要注意的是，如果你需要在5s之后执行动画，并不能简单的直接赋值。而是需要CACurrentMediaTime() + 5这样来设置。
 - duration: 动画的持续时间，默认为0.25秒
@@ -51,7 +51,7 @@ description: iOS 动画绝大部分都是通过 Core Animation 框架来完成�
 @end
 ```
 
-#### CAAnimation 自带的属性如下：
+##### CAAnimation 自带的属性如下：
 
 - timingFunction: 控制动画的显示节奏。有五种选择，如下：
 	- kCAMediaTimingFucntionLinear：线性动画
@@ -72,7 +72,7 @@ description: iOS 动画绝大部分都是通过 Core Animation 框架来完成�
 @end
 ```
 
-#### iOS 动画的调用方式
+##### iOS 动画的调用方式
 
 1. 方式一：使用 Core Animation 类
 
@@ -106,7 +106,7 @@ description: iOS 动画绝大部分都是通过 Core Animation 框架来完成�
     }];
 ```
 
-### CAPropertyAnimation
+#### CAPropertyAnimation
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是CAAnimation的子类，也是个抽象类，要想创建动画对象，应该使用它的两个子类：CABasicAnimation和CAKeyframeAnimation。上述类图中可以看到：
 
@@ -141,7 +141,7 @@ shadowOpacity |
 shadowRadius | 
 
 
-### CABasicAnimation
+#### CABasicAnimation
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个类提供了基于 `keyPath` 创建的基本动画，这个 `keyPath` 可以是上述列出来的任何属性，动画的变化内容。[demo](https://github.com/benlinhuo/AnimationSet) 中有对应的动画实例。
 
@@ -162,7 +162,7 @@ shadowRadius |
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上述三个属性配合使用达到动画效果。同时使用 byValue 和 fromValue ，那 toValue=fromValue+byValue。同时使用 byValue 和 toValue，那 fromValue=toValue - byValue。所以 fromValue、byValue、toValue，只能使用三者之二，不能三者同时使用。
 
 
-### CAKeyframeAnimation
+#### CAKeyframeAnimation
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;它是在 CABasicAnimation 基础上做了扩展。CABasicAnimation只能从一个数值（fromValue）变到另一个数值（toValue）。CAKeyframeAnimation 可以使用一个数组来保存这些数值，实现多个点之间的动画效果。而 CABasicAnimation 可看作是最多只有2个关键帧的 CAKeyframeAnimation。
 
@@ -281,7 +281,7 @@ shadowRadius |
 }
 ```
 
-### CATransition
+#### CATransition
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用于做专场动画，能够为层提供移出屏幕和移入屏幕的动画效果。如我们的 UINavigationController 可以使用 CATransition 的各种效果将控制器的视图推入屏幕。[Demo](https://github.com/benlinhuo/AnimationSet) 中有针对各种的 type 效果案例。
 
@@ -494,6 +494,8 @@ HBLAnimationSet[38495:9807678] t1是否等于t2：1
 + (void)transitionFromView:(UIView *)fromView toView:(UIView *)toView duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^ __nullable)(BOOL finished))completion 
 ```
 我们之前有见过视图控制器（ `UIViewController`） 的转场动画，那其实视图（`UIView`）也是可以进行转场动画的。
+
+其实 `UIView` 的几个用来动画的类方法，和使用 CAAnimation 方式的区别是：CAAnimation 动画还可以针对 CALayer 类型的图形层，而 `UIView` 就只能服务于自己。
 
 
 ## 3D仿射变换
