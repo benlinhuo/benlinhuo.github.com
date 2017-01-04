@@ -13,7 +13,10 @@ description: 如果我们想要在每一个 API 请求的时候做一些事情�
 
 ## hook 的实现
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实实现挺简单的，我们重写原生的 `XMLHttpRequest` 。重写的方案就是遍历该对象的所有属性和方法，遍历过程中重写这些方法的实现。针对你需要 hook 的方法，则在实现它原生需要执行的内容前，先执行你想要做的事情（如日志统计等）；如果不是我们 hook 的方法，则直接执行原生执行的内容即可。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其实实现挺简单的，我们重写原生的 `XMLHttpRequest` 。重写的方案就是遍历该对象的所有属性和方法，遍历过程中重写这些方法的实现。针对你需要 hook 的方法，则在实现它原生需要执行的内容前，先执行你想要做的事情（如日志统计等）；如果不是我们 hook 的方法，则直接执行原生执行的内容即可。该对象循环的方法有 `open  setRequestHeader   send   abort  getResponseHeader   getAllResponseHeaders   overrideMimeType  addEventListener  removeEventListener  dispatchEvent `，属性有： `UNSENT  OPENED   HEADERS_RECEIVED   LOADING  DONE
+onreadystatechange  readyState  timeout  withCredentials   upload   responseURL
+status   statusText   responseType  response   responseText   responseXML   onloadstart  
+onprogress   onabort   onerror   onload   ontimeout  onloadend `
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们重写了 `XMLHttpRequest` 对象，当然也需要保存原来的该对象以便需要的时候可以恢复。以下代码就是 hook 的具体代码实现：
 
