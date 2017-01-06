@@ -2,7 +2,7 @@
 layout:     post
 title:      XMLHttpRequest 底层JS的API请求hook
 category: javascript
-tags: [iOS]
+tags: [javascript]
 description: 如果我们想要在每一个 API 请求的时候做一些事情，如日志统计，统一添加头信息等，而且对原生JS的封装使用到了多个库（如jQuery、vue-resource等），这种情况下，该怎么处理比较合理呢？
 ---
 
