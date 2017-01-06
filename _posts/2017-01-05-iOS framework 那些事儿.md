@@ -96,7 +96,7 @@ description: 我们项目中经常会用到 framework，你有想过什么情况
 
 ![run script 方式](/assets/images/runScript-BuildPhases.png)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如上图，我们添加了脚本之后，这个脚本的执行顺序是先 `Link`，再 "Run Script"。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如上图，我们添加了脚本之后，这个脚本的执行顺序是先 `Link`，再 `Run Script`。
 
 ![先 Link](/assets/images/framework-link.png)
 
