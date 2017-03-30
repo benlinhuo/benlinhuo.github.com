@@ -511,17 +511,17 @@ HBLAnimationSet[38495:9807678] t1是否等于t2：1
 
   1> anchorPoint 的图形解析如下：
 
-  ![anchorPoint在中心位置](/assets/image/anchorPoint1.png)
+  ![anchorPoint在中心位置](/assets/images/anchorPoint1.png)
 
-  ![anchorPoint在边缘位置](/assets/image/anchorPoint2.png)
+  ![anchorPoint在边缘位置](/assets/images/anchorPoint2.png)
 
   2> anchorPoint 的移动解释如下：
   
-  ![移动前，anchorPoint位置](/assets/image/anchorPointBefore.png)
+  ![移动前，anchorPoint位置](/assets/images/anchorPointBefore.png)
   
   移动前，锚点位置如上图，为（0.5，0.5）。当我们把锚点位置更改为（0，0），变成下图，其实我们可以看出来锚点没变，只是整个视图 position 变化了。一般来说，在我们修改完 anchorPoint 之后，会引起 layer 的 position 变化，所以一般需要重新修改 frame 来使 layer 回到正确位置上。（应该注意修改顺序，frame 实际是不保存，没有值的，它是根据 position 和 anchorPoint 算出来的）
   
-  ![移动后，anchorPoint位置](/assets/image/anchorPointAfter.png)
+  ![移动后，anchorPoint位置](/assets/images/anchorPointAfter.png)
 
 - frame：它本身是不会保存的，它是根据 position 和 bounds 获取到的。
 
