@@ -144,11 +144,21 @@ c. 代码接收 Universal Links 唤醒
 如果已经配置过 Universal Links ，则用户在第一次安装 app 时，苹果会发送一个请求，请求你服务器上的 `apple-app-site-association`。
 
 
+
+## 总结
+
 Unversal Link 工作流程图（来源于网上总结）：
 
 ![Unversal Link 工作流程图](/assets/images/universalLinkParse.png)
 
 
+### 注意点
+
+1) 使用抓包软件可以看到，只有初次安装app时才会去请求 `apple-app-site-association` ；
+
+2) Universal Links 之所以可行，是因为运行在 iOS 系统上的所有app，当他们使用苹果的 `webKit` 打开某一个链接，`webKit` 会优先拦截到，然后通过配置文件 `apple-app-site-association` 的配置规则，来决定该链接是跳转到 app ，还是直接浏览器打开对应页面。
+
+3) 通用链接 和 调用通用链接的网页 不要使用同一个域名，即如果通用链接域名为 `www.mydomain.com`，则通用链接所处的网页域名就不能是 `www.mydomain.com`
 
 
 ## 魔窗mLink
@@ -194,10 +204,15 @@ else [MWApi routeMLink:url]; return YES;
 
 
 
+参考链接：
 
+[iOS9 Universal Links踩坑之旅，移动应用之deeplink唤醒app](https://www.jianshu.com/p/77b530f0c67b)
 
+[iOS 9学习系列：打通 iOS 9 的通用链接（Universal Links）](http://www.cocoachina.com/ios/20150902/13321.html)
 
+[iOS Universal Links & URL Scheme](https://www.jianshu.com/p/53588cf8dbc8?nomobile=yes)
 
+[mLink iOS SDK 集成文档](http://www.magicwindow.cn/doc/mlink-sdk-ios.html#begin-start/senior-set)
 
 
 
