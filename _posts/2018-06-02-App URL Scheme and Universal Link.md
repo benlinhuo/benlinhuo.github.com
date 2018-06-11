@@ -50,7 +50,7 @@ description: 因业务项目的导流（分享的H5链接打开，可以到对�
 
 ### 1.创建配置文件 apple-app-site-association
 
-#### (1) 创建文件名为 apple-app-site-association(必须为该文件名，不能带后缀名)，包含固定格式的 json 文件；
+##### 创建文件名为 apple-app-site-association(必须为该文件名，不能带后缀名)，包含固定格式的 json 文件；
 
 ```
 {     
