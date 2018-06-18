@@ -165,6 +165,11 @@ Unversal Link 工作流程图（来源于网上总结）：
 4) 其实上述的方案中，无论URI Scheme 还是 Universal Link 都无法解决一个问题，就是如果设备上该app还没有安装，保留住此时用户停留的上下文。例如，利用Universal Link，在没有安装app的情况下，iOS能够重定位到app store去引导用户去下载安装这个app，但是在安装之后，app只能打开首页，也就是说丢失了用户在点击跳转进入app之前的那个页面。这种问题，个人觉得解决方案：1. 在跳转到安装之前，利用服务端记录，然后在第一次进入app的时候，通过服务端数据跳转不同页面，这种方案依赖网络，可行性不高；2. 利用剪切板，在跳转下载页之前，按照约定把跳转链接放置剪切板，下载后进入，第一次打开app的时候，从剪切板获取对应数据，进行相应跳转。
 
 
+在2017年初，测试 Universal Link ，微信中打开时可以的，但是2018年6月2号测试，发现微信打开不了 Universal Link 链接了，不过 QQ 可以。但尝试京东 APP 是可以的，查看资料，发现微信有做白名单机制，只有白名单的 APP 才可以通过 Universal Link 唤醒第三方app。
+
+![Unversal Link QQ 和 微信的测试](/assets/images/universalLinkExample.mp4)
+
+
 ## 魔窗mLink
 
 魔窗的深层链接实现方案就是使用了 `Universal Link`（iOS 9+）和 `URL Scheme` 。它通过 URL Scheme 和 Universal link 配置唤醒app的代码
