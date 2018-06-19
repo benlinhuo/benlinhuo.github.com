@@ -169,6 +169,8 @@ Unversal Link 工作流程图（来源于网上总结）：
 
 ![Unversal Link QQ 和 微信的测试](/assets/images/universalLinkExample.mp4)
 
+<iframe height="498" width="510" src="/assets/images/universalLinkExample.mp4"></iframe>
+
 
 ## 魔窗mLink
 
