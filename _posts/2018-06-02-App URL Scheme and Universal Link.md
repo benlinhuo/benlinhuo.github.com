@@ -19,7 +19,9 @@ description: 因业务项目的导流（分享的H5链接打开，可以到对�
 	它需要在项目中配置 URL Types，如下图：    
 	![URL Types配置](/assets/images/urlTypes.jpg)
 	
-	这种方式的跳转是协议跳转。但是微信或者QQ不能打开第三方应用（即zaapp:// 无法跳转到众安app），是因为微信和QQ使用的是自己研发的QQ浏览器，它不遵循 URL Schemes 协议。
+	这种方式的跳转是协议跳转。但是微信或者QQ不能打开第三方应用（即zaapp:// 无法跳转到众安app），是因为微信和QQ 禁用了 URL Schemes 协议。如果我们想要使用这种方式导流就只能告知用户通过浏览器打开，然后再跳转，见如下视频：
+	
+<iframe height="498" width="510" src="/assets/images/weixin_urlscheme.mp4"></iframe>
 	
 
 2. Universal Link
