@@ -194,6 +194,7 @@ Unversal Link 工作流程图（来源于网上总结）：
 [微信封堵 Universal Link ,universal links微信](http://www.code4app.com/thread-25603-1-1.html)
 
 [微信6.6.1  universal link失效](http://www.cocoachina.com/bbs/read.php?tid=1730083)
+[禁用 WKWebView 的 Universal Link](https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview)
 
 
 #### 希望--应用宝（亲儿子）
