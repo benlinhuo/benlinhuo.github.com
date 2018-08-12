@@ -174,6 +174,34 @@ Unversal Link 工作流程图（来源于网上总结）：
 备注：mp4 展示不了的话，可以直接通过链接查看 [Unversal Link QQ 和 微信的测试](http://benlinhuo.github.io/assets/images/universalLinkExample.mp4)
 
 
+#### 微信封堵 Universal Link
+
+有通过一直在使用 Universal Link 企业的现身说法：从2018年1月中旬开始，Universal Link 又被微信禁了（一把辛酸泪）。禁止的方案通过 stackoverflow 可知：通过苹果未公开使用的一个枚举值 `_WKNavigationActionPolicyAllowWithoutTryingAppLink ` ，该枚举值等于 `WKNavigationActionPolicyAllow` 这个系统公开枚举值+2，所以即使是私有值，也都可以通过这个（公开的枚举+2）来大胆实现而不怕被拒。
+
+```
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    //返回+2的枚举值
+    decisionHandler(WKNavigationActionPolicyAllow + 2);
+}
+```
+
+而且网上有大牛逆向微信代码发现有个方法 `isCloseUniversallink `，可见它是个远程开关，也就是微信不用发版本也都可以来控制这个能力。当然对于那些腾讯系的，则会有白名单的优待。
+
+具体可见链接：
+
+[微信封堵 Universal Link ,universal links微信](http://www.code4app.com/thread-25603-1-1.html)
+
+[微信6.6.1  universal link失效](http://www.cocoachina.com/bbs/read.php?tid=1730083)
+
+
+#### 希望--应用宝（亲儿子）
+
+微信是个强流量的app，我们多么希望可以通过它直接跳转到我们自己的app（引流），但微信也没这么高尚，他堵了 url scheme ，现在又堵了 Universal Link 。现在还有个曲折点的路，就是通过他的亲儿子应用宝中转跳转到我们app。可见下图的今日头条视频：
+
+<iframe height="498" width="510" src="/assets/images/ApplicationBaby.mp4"></iframe>
+
+
+
 ## 魔窗mLink
 
 魔窗的深层链接实现方案就是使用了 `Universal Link`（iOS 9+）和 `URL Scheme` 。它通过 URL Scheme 和 Universal link 配置唤醒app的代码
