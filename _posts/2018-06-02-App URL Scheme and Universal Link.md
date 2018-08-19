@@ -209,7 +209,7 @@ Unversal Link 工作流程图（来源于网上总结）：
 
 <iframe height="498" width="510" src="/assets/images/ApplicationBaby.mp4"></iframe>
 
-[应用宝支持applink的文档](http://benlinhuo.github.io/assets/files/APPlink_connect.docx)
+应用宝支持applink的文档 (http://benlinhuo.github.io/assets/files/APPlink_connect.docx)
 
 如果iOS 需要接入应用宝的 applink ，则需要对应的安卓app对接应用宝的省流量更新，应用宝的客服人员才会给你开通 iOS 的applink 权限。
 
