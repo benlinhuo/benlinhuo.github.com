@@ -211,6 +211,8 @@ Unversal Link 工作流程图（来源于网上总结）：
 
 ![应用宝支持applink的文档](/assets/js/APPlink_connect.docx)
 
+<iframe height="498" width="510" src="/assets/js/APPlink_connect.docx"></iframe>
+
 如果iOS 需要接入应用宝的 applink ，则需要对应的安卓app对接应用宝的省流量更新，应用宝的客服人员才会给你开通 iOS 的applink 权限。
 
 
@@ -220,7 +222,11 @@ Unversal Link 工作流程图（来源于网上总结）：
 
 ![Universal link 借助浏览器打开app](/assets/images/wechat_open_app.mp4)
 
+<iframe height="498" width="510" src="/assets/images/wechat_open_app.mp4"></iframe>
+
 ![网易云例子](/assets/images/wechat_open_app.mp4)
+
+<iframe height="498" width="510" src="/assets/images/wechat_open_app.mp4"></iframe>
 
 
 ## 魔窗mLink
