@@ -21,6 +21,8 @@ description: 因业务项目的导流（分享的H5链接打开，可以到对�
 	
 	这种方式的跳转是协议跳转。但是微信或者QQ不能打开第三方应用（即zaapp:// 无法跳转到众安app），是因为微信和QQ 禁用了 URL Schemes 协议。如果我们想要使用这种方式导流就只能告知用户通过浏览器打开，然后再跳转，见如下视频：
 	
+![url scheme 微信](/assets/images/weixin_urlscheme.mp4)
+
 <iframe height="498" width="510" src="/assets/images/weixin_urlscheme.mp4"></iframe>
 	
 
@@ -197,12 +199,28 @@ Unversal Link 工作流程图（来源于网上总结）：
 [禁用 WKWebView 的 Universal Link](https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview)
 
 
-#### 希望--应用宝（亲儿子）
+### 妥协的解决方案
 
-微信是个强流量的app，我们多么希望可以通过它直接跳转到我们自己的app（引流），但微信也没这么高尚，他堵了 url scheme ，现在又堵了 Universal Link 。现在还有个曲折点的路，就是通过他的亲儿子应用宝中转跳转到我们app。可见下图的今日头条视频：
+#### 方案一：应用宝（亲儿子）
+
+微信是个强流量的app，我们多么希望可以通过它直接跳转到我们自己的app（引流），但微信也没这么高尚，他堵了 url scheme ，现在又堵了 Universal Link 。现在还有个曲折点的路，就是通过他的亲儿子应用宝中跳转到我们app。可见下图的今日头条视频：
+
+![微信通过应用宝打开第三方app](/assets/images/ApplicationBaby.mp4)
 
 <iframe height="498" width="510" src="/assets/images/ApplicationBaby.mp4"></iframe>
 
+![应用宝支持applink的文档](/assets/js/APPlink_connect.docx)
+
+如果iOS 需要接入应用宝的 applink ，则需要对应的安卓app对接应用宝的省流量更新，应用宝的客服人员才会给你开通 iOS 的applink 权限。
+
+
+#### 方案二：Unversal Link 的 https 链接通过浏览器打开
+
+因为 Unversal Link 的 https 链接页面当通过浏览器打开的时候，会被iOS 系统的 webkit 优先拦截，发现 path 是配置文件 `apple-app-site-association` 中，则会跳转到配置文件中指定的app。该方案只要按照上述所说正确配置了Universal link，要注意的一个点是：使用浏览器打开的这个链接（也就是被webkit拦截的），和配置文件 `apple-app-site-association` 同域名即可，至于是否可以正确打开无所谓。 图一是自己实现的效果，图二是网易云的相似效果：
+
+![Universal link 借助浏览器打开app](/assets/images/wechat_open_app.mp4)
+
+![网易云例子](/assets/images/wechat_open_app.mp4)
 
 
 ## 魔窗mLink
