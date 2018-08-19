@@ -209,7 +209,7 @@ Unversal Link 工作流程图（来源于网上总结）：
 
 <iframe height="498" width="510" src="/assets/images/ApplicationBaby.mp4"></iframe>
 
-![应用宝支持applink的文档](/assets/js/APPlink_connect.docx)
+![应用宝支持applink的文档](/assets/files/APPlink_connect.docx)
 
 <iframe height="498" width="510" src="/assets/js/APPlink_connect.docx"></iframe>
 
@@ -224,9 +224,9 @@ Unversal Link 工作流程图（来源于网上总结）：
 
 <iframe height="498" width="510" src="/assets/images/wechat_open_app.mp4"></iframe>
 
-![网易云例子](/assets/images/wechat_open_app.mp4)
+![网易云例子](/assets/images/wangyiyun_universal_link.mp4)
 
-<iframe height="498" width="510" src="/assets/images/wechat_open_app.mp4"></iframe>
+<iframe height="498" width="510" src="/assets/images/wangyiyun_universal_link.mp4"></iframe>
 
 
 ## 魔窗mLink
