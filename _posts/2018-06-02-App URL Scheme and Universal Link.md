@@ -211,7 +211,7 @@ Unversal Link 工作流程图（来源于网上总结）：
 
 ![应用宝支持applink的文档](/assets/files/APPlink_connect.docx)
 
-<iframe height="498" width="510" src="/assets/js/APPlink_connect.docx"></iframe>
+<iframe height="498" width="510" src="/assets/files/APPlink_connect.docx"></iframe>
 
 如果iOS 需要接入应用宝的 applink ，则需要对应的安卓app对接应用宝的省流量更新，应用宝的客服人员才会给你开通 iOS 的applink 权限。
 
