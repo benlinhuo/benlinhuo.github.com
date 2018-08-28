@@ -213,6 +213,10 @@ Unversal Link 工作流程图（来源于网上总结）：
 
 如果iOS 需要接入应用宝的 applink ，则需要对应的安卓app对接应用宝的省流量更新，应用宝的客服人员才会给你开通 iOS 的applink 权限。
 
+针对scheme带参数的，需要参数部分和非参数部分 分别进行encode，可见下图示例：
+
+![应用宝scheme带参数分别encode](/assets/images/yingyongbao_scheme.png)
+
 
 #### 方案二：Unversal Link 的 https 链接通过浏览器打开
 
