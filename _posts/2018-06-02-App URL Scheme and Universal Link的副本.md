@@ -1,109 +1,14 @@
 ---
 layout:     post
-title:      Runloop 实例解析之Source（二）
+title:      App URL Scheme and Universal Link
 category: iOS
 tags: [iOS]
-description: Runloop对一般的开发者来说，似乎会觉得平时开发中用的不多，其实是因为苹果帮我们封装的太好了。后面主要会使用例子来解析runloop的使用。
+description: 因业务项目的导流（分享的H5链接打开，可以到对应app的具体业务页面），或者多款项目app之间互导流量（app 之间相互跳转）。
 ---
 
-## 简介
+### NSMachPort
 
-Runloop 接收的输入事件来自两种不同的源：输入源（intput source）和定时源（timer source）。输入源传递异步事件。通常消息来自于其他线程或程序。定时源则传递同步事件，发生在特定时间或者重复的时间间隔。两种源都使用程序的某一特定的处理历程来处理到达的时间。
-
-本篇文章主要会针对 Runloop 中某一mode下 source 进行讲解。接着上一篇[Runloop 实例解析之Timer（一）](http://benlinhuo.github.io//ios/2018/12/09/Runloop%E5%AE%9E%E4%BE%8B%E8%A7%A3%E6%9E%90-%E4%B8%80.html)
-
-
-## 实例
-
-### dispatch_source_t
-
-```
-@interface ViewController ()
-
-@property (nonatomic, strong) dispatch_source_t timer;
-
-@end
-
-@implementation ViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    // 我们尽量不要更改队列优先级
-    dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
-    
-    // 创建一个定时器
-    // 注意此处的timer必须要用strong引用，否则该viewDidLoad方法执行结束，timer也就释放了。毁掉也就不会被执行，可以运行看看
-    self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    // 设置 timer GCD 时间单位是纳秒。NSEC_PER_SEC 该宏就是把纳秒转成秒
-    dispatch_source_set_timer(self.timer, DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC, 0);
-    // 设置回调
-    dispatch_source_set_event_handler(self.timer, ^{
-        NSLog(@"-----%@", [NSThread currentThread]);
-    });
-    // 启动
-    dispatch_resume(self.timer);
-}
-```
-
-该代码是使用 dispatch_source 创建定时器，我们会发现上述的回调block中打印的线程是子线程。所以当我们滑动TextView组件，它仍然会正常打印。dispatch_source 本质还是使用runloop来处理事件。如下是运行结果的gif.
-
-![dispatch_source运行](/assets/images/dispatch_source.gif)
-
-此处说明一个GCD的点：GCD 准确来说是并发编程技术（只是封装了多线程的使用）。它其实在iOS 3.0就有了，只是后来才对外开放的。它的出现主要是为了多核CPU硬件的开发，因为当时苹果会预料到说未来会有多核的出现，为了未来在出现多核时，能直接通过GCD兼容处理即可，让上层的开发者不用更改一行代码就可以移植到多核机器上运行。所以苹果很多底层的开发也是使用GCD。
-
-
-### 原理
-
-Source （事件源）
-
-所有事件/对象等在底层本质都是二进制，在变成二进制之前，它是电信号。所以当你触摸屏幕（网络数据回调、时钟到时间点），都是硬件设备最清楚。（只有硬件才能计时）。硬件都是电信号，电信号网络上走，变成数据，数据进入内存，变成了0101的二进制，二进制进入内存，是我们的操作系统读这个内存，读了这个内存把它包装成OC的对象（包装成C的东西，就是结构体等）。
-
-而Source 是在上述数据在一层层走之前（电信号之前），首先包装成了一个Source的东西。
-
-按照官方文档分类：
-
-1. Port-Based Sources (基于端口,跟其他线程交互,通过内核发布的消息)
-2. Custom Input Sources (自定义)
-3. Cocoa Perform Selector Sources (performSelector...方法)
-
-按照函数调用栈，它分为2种：
-
-1. Source0 非Source1的都是Source0
-2. Source1 通过内核和其他线程通讯、以及一些系统事件。
-
-如下截图案例，我们断点，即可看到左侧的调用栈：
-
-![调用栈](/assets/images/runloop_func.png)
-
-按照调用栈倒序
-
-9.CFRunLoopDoSource0: 因为这是用户触摸屏幕才有的，所以不是系统级别的，包装成了Source0，
-
-10.CFRunLoopRun: runloop被开启了
-
-12.GSEventRunModal: 这是系统内核事件，这个模式程序员是不会触碰到的。除了之前讲的3种模式，另有2种：a) UIInitializationRunLoopMode 指在刚启动 App 时进入的第一个 Mode，启动完成后就不再使用；b) GSEventReceiveRunLoopMode 表示系统事件的内部Mode，通常用不到。（即GSEventRunModal）
-
-所以任一事件，本质上都是一个Source。
-
-## RunLoop的输入源
-
-输入源异步的发送消息给你的线程，时间的来源取决于输入源的种类：`基于端口的输入源`和`自定义输入源`。
-
-`基于端口的输入源`： 监听程序相应的端口。由内核自动发送
-
-`自定义输入源`：监听自定义的事件源。需要人工从其他线程发送
-
-其实 Runloop 并不关心输入源是基于端口的还是自定义的。
-
-对于我们创建的输入源，需要将其分配给runloop中的一个或多个模式。模式只会在特定事件影响监听的源。大多数情况下，runloop 运行在默认模式下，但是你也可以使其运行在自定义模式中。若某一源在当前模式下不被监听，那么任何生成的消息只在 runloop 运行在所关联的模式下才会被传递。
-
-### 基于端口的输入源
-
-Cocoa 和 CoreFoundation 内置支持使用端口相关的对象和函数来创建基于端口的源。在 Cocoa 里面你从来不需要直接创建输入源。只要简单的创建对象，并使用 NSPort 的方法将该端口添加到 ruhnloop 中。端口对象会自己处理创建和配置的输入源。
-
-`配置 NSMachPort 对象`：为了和 NSMachPort 对象建立稳定的本地连接,你需要创建端口对象并将之加入相应的线程的 run loop。当运行辅助线程的时候，你传递端口对象到线程的主体入口点。辅助线程可以使用相同的端口对象将消息返回给原线程。所以我们经常将其用于2个线程之间相互通信。
-
+在说到Runloop，我们经常会碰到一个东西：NSPort。它一般是运用在两个线程之间要互相通信。如下介绍的也就是个基础，我们可以看如下2个实例：
 
 1. 案例一：主线程触发创建子线程，然后把获取的端口带给子线程，子线程也获取端口，然后利用之前传递过来的主线程端口，发送消息给子线程。
 
@@ -279,9 +184,14 @@ Cocoa 和 CoreFoundation 内置支持使用端口相关的对象和函数来创�
 以上2个案例的demo，可以查看[NSMachPort 实例](https://github.com/benlinhuo/BLOGExample/tree/master/RunloopMachPort)
 
 
-### 自定义输入源
 
-查看了一些资料，目前理解不是很深入，后面有进展会更新内容。关于 CFRunLoopSourceRef 相关内容，可以查看[iOS - RunLoop 深入理解](https://www.jianshu.com/p/edbe946c8a11)
+
+
+
+
+
+
+
 
 
 
