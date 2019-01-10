@@ -270,14 +270,15 @@ iOS 对 NSURLRequest 默认的缓存策略如下：（实际上能使用的只�
 5. NSURLRequestReturnCacheDataElseLoad 
 
  	该策略它会一直尝试读取缓存数据，直到无法读取到缓存数据的时候，才会去请求网络。这样它有一个重大缺陷会让它根本无法被使用，因为它根本没有对缓存的刷新时机进行控制（比如过期了也不管，直接返回缓存的过期数据），如果你要去使用它，则需要额外的进行缓存过期控制。
-
-
+ 	
+ 	
 6. NSURLRequestReturnCacheDataDontLoad // 有缓存就用缓存，没有缓存就不发请求，当做请求出错处理（用于离线模式）
+
 7. NSURLRequestReloadRevalidatingCacheData // 未实现
 
 如果我们自己去实现（像上述给出的完整缓存代码），则不用关心介绍的缓存策略，缓存策略完全是自己的实现代码决定。
 
-如果我们想要在上述几个默认选项基础上，对缓存进行精确的控制或者修改，可以实现NSURLProtocol子类。NSURLProtocol 它是个非常强大的类，不过它是个抽象类，所以只有实现它的子类才行。它可以拦截所有的请求，包括UIWebView中发起的请求（不过新的WKWebView中请求无法被拦截，WKWebView的请求都是在单独的进程中，所以不走NSURLProtocol），你可以修改request，或者response。所以这么看起来，NSURLProtocol 有点像中间人，它可以做很多事情。
+如果我们想要在上述几个默认选项基础上，对缓存进行精确的控制或者修改，可以实现NSURLProtocol子类。NSURLProtocol 是个非常强大的类，不过它是个抽象类，所以需要实现它的子类。它可以拦截所有的请求，包括UIWebView中发起的请求（不过新的WKWebView中请求无法被拦截，WKWebView的请求都是在单独的进程中，所以不走NSURLProtocol），你可以修改request，或者response。所以这么看起来，NSURLProtocol 有点像中间人，它可以做很多事情。
 
 ### 网络协议中有关缓存的字段
 
