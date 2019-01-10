@@ -122,7 +122,7 @@ static NSUInteger HTTPReturnSuccessCode = 200;
 
 它缓存的数据，是使用数据库存在本地。我们打开沙盒路径下的 `Library/Caches` ，如果像上述代码指定存储路径，则会在 `Library/Caches/networkCacheDisk` 下有如下数据库文件：
 
-![数据库文件路径](/assets/images/urlCache.png)
+![数据库文件路径](/assets/images/urlcache.png)
 
 
 我们可以在 Appstore 直接下载sqlite的打开工具 `Datum - Lite`，则会看到该数据库中有多张表。
