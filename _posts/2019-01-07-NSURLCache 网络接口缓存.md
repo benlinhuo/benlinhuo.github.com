@@ -122,7 +122,7 @@ static NSUInteger HTTPReturnSuccessCode = 200;
 
 它缓存的数据，是使用数据库存在本地。我们打开沙盒路径下的 `Library/Caches` ，如果像上述代码指定存储路径，则会在 `Library/Caches/networkCacheDisk` 下有如下数据库文件：
 
-![数据库文件路径](/assets/images/urlCache.jpg)
+![数据库文件路径](/assets/images/urlCache.png)
 
 
 我们可以在 Appstore 直接下载sqlite的打开工具 `Datum - Lite`，则会看到该数据库中有多张表。
@@ -130,7 +130,7 @@ static NSUInteger HTTPReturnSuccessCode = 200;
 1. 表cfurl_cache_response
 `cfurl_cache_response` 表中可以看到有个字段 `request_key`，它的值便是我们存入时指定的request，针对上述代码，则为 `https://mgw-daily.xxx.com/appapi/za-dm-skywalker/v1/app/policy/list/claimable_376B8B6C5B2502750F4A341956F9ADFD_%7B%22searchType%22:%22all%22,%22familyMemberShip%22:%220%22,%22pageSize%22:%2210%22,%22pageNo%22:%221%22%7D`，拆开可以看到时请求URL+sign+请求参数拼接而成。
 
-![cfurl_cache_response内容](/assets/images/cfurl_cache_response.jpg)
+![cfurl_cache_response内容](/assets/images/cfurl_cache_response.png)
 
 
 其中有个字段storage_policy:缓存策略。它主要用于标明是否缓存，其中0表示 NSURLCacheStorageAllowed
@@ -145,7 +145,7 @@ typedef NS_ENUM(NSUInteger, NSURLCacheStoragePolicy)
 
 ```
 
-![cfurl_cache_response内容](/assets/images/cfurl_cache_response_field.jpg)
+![cfurl_cache_response内容](/assets/images/cfurl_cache_response_field.png)
 
 
 2. 表cfurl_cache_blob_data  
