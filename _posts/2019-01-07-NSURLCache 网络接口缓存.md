@@ -15,6 +15,8 @@ description: 一般的网络请求框架，没人不知道AFNetworking，但是�
 
 此处提供一个完整代码的实现（曾经项目中使用过）。其实利用 `NSURLCache` 来做这个事情，还是很简单的。自己制定规则读写一个带有 NSURLResponse对象的NSURLCache，创建一个 `NSURLCache` 的子类。
 
+其实这个类很简单，唯一做的2件事是：1) 它根据自己的需求生成存储的 requestKey，而不只是url.absoluteString；2）它根据自己的需求在适当的时机进行增删改。
+
 ```
 #import "HBLURLCache.h"
 
