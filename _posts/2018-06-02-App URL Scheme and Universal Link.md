@@ -230,6 +230,16 @@ Unversal Link 工作流程图（来源于网上总结）：
 
 <iframe height="498" width="510" src="/assets/images/wangyiyun_universal_link.mp4"></iframe>
 
+## 原生使用OpenUrl方法效果
+
+当我们使用方法 `openURL` （如下）打开一个H5链接时，它会直接跳转到浏览器中打开该H5页面，如果说该H5页面是在某个app中做了上述 Universal Link 的配置，则它会跳过浏览器直接打开对应app（第三方app），如下链接视频效果。 
+
+<iframe height="498" width="510" src="/assets/images/universalLink_OpenUrl.mp4"></iframe>
+
+
+```
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://static.zhongan.com/website/app/html/downLoadLink/build/html/index.html?channel=SYBXRLB"]];
+```
 
 ## 魔窗mLink
 
