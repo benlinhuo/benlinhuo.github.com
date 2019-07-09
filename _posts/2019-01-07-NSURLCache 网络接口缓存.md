@@ -443,7 +443,11 @@ NSCache 对象还有一个代理属性，声明如下：
 特别需要注意的是，该代理方法中我们不可以修改 cache 对象，能做的也就是打印结果，查看，用于调试。
 
 
+参考链接：
 
+[NSURLCache缓存的那些事](http://3code.info/blog/2015/10/NSURLCache.html#3%E8%BF%9B%E9%98%B6post-%E7%BC%93%E5%AD%98?nsukey=T82BqEHBUxkGgnrz%2FOCN7p6M%2F30y4JMMZUujUMos8BbILuTWUpi%2FcGTQGeOEsTbK3TEVVp21K31SO9d5qQETdQhr7AikRBHVanfMVPHZXop8suaX9xjikmSBoA5Dw1%2BHbF5u6J3vnIrP2R99WOaKUF92lJKKdOGgobCbzw1WcgBnrFdh%2B7m5xXlM9LwWwu4Sjc4QsqbOW%2BPTn66Xh5Y7ug%3D%3D)
+
+[iOS网络请求缓存：NSURLCache详解](https://juejin.im/post/584d0d3f8e450a006ac3f8ef)
 
 
 
