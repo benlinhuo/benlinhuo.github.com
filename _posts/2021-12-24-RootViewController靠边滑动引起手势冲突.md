@@ -14,7 +14,7 @@ description: 真机测试我们经常会遇到在RootViewController往最左侧�
 
 对应下面截图：
 
-![img] (手势冲突案例1.jpeg)
+![img] (gestureConflict1.jpeg)
 
 ### 发生的问题
 
@@ -43,7 +43,7 @@ RootViewController本身是有左滑事件的，interactivePopGestureRecognizer�
 
 对应下面截图：
 
-![img] (手势冲突案例2.jpeg)
+![img] (gestureConflict2.jpeg)
 
 ### 发生的问题
 
