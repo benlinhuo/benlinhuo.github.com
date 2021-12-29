@@ -13,6 +13,7 @@ description: 真机测试我们经常会遇到在RootViewController往最左侧�
 我们的页面组成是整体是UITabbarController，然后下面有4个tabbar，每个tabbar对应一个UINavigationController。
 
 对应下面截图：
+
 ![img] (手势冲突案例1.jpeg)
 
 ### 发生的问题
@@ -41,6 +42,7 @@ RootViewController本身是有左滑事件的，interactivePopGestureRecognizer�
 我们的页面组成是整体是UITabbarController，然后下面有4个tabbar，每个tabbar对应一个UINavigationController。当前RootViewController头部有多个tab：推荐/保险/健康。每个tab对应的是childController。本质是一个ViewController包含多个childViewController.
 
 对应下面截图：
+
 ![img] (手势冲突案例2.jpeg)
 
 ### 发生的问题
